@@ -1,6 +1,6 @@
 import requests
 import json
-
+#donot do anything
 def sender(number,msg):
             URL = 'http://www.way2sms.com/api/v1/sendCampaign'
 
