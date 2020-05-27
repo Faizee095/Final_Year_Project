@@ -3,6 +3,7 @@ from src.subsidiaries.components.Utils.Music.MyMusicDownloader import YouTubeDow
 from src.subsidiaries.components.Utils.searcher.helpers.youtubePlayer import playOnYoutube
 from src.subsidiaries.components.Utils.speech.speechText import SpeechRecogReg
 from src.subsidiaries.components.Utils.weather.weather import getWeatherData
+from src.subsidiaries.components.Utils.Music.Musically import play
 
 
 class ActionDecider:
@@ -37,6 +38,8 @@ class ActionDecider:
             ydl.download(search_url)
             VoiceEngine.getVoice("downloading file. . .please wait !")
             # del ydl
+        elif "play music" in textForm:
+            play()
 
         elif "email" in textForm:
             VoiceEngine.getVoice("I understand you want to send an Email")

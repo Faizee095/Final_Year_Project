@@ -24,6 +24,7 @@ def SpeechRecogReg():
     text = ""
     r1 = sr.Recognizer()
     with sr.Microphone() as source:
+        r1.adjust_for_ambient_noise(source)
         print("Give command")
         audio = r1.listen(source)
         try:

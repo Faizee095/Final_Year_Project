@@ -1,4 +1,5 @@
-import os
+import vlc
 
-filename = 'C:\\Users\\sumitsingh\\Documents\\Python\\hma\\lover also fighter also.mp3'
-os.startfile(filename)
+s = vlc.MediaPlayer(
+    "F:\\song\\Song.mp3")
+s.play()
