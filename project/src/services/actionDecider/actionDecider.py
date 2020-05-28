@@ -2,6 +2,7 @@ from src.subsidiaries.components.Utils.speech.textSpeech import VoiceEngine
 from src.subsidiaries.components.Utils.Music.MyMusicDownloader import YouTubeDownloader
 from src.subsidiaries.components.Utils.searcher.helpers.youtubePlayer import playOnYoutube
 from src.subsidiaries.components.Utils.speech.speechText import SpeechRecogReg
+from src.subsidiaries.components.Utils.weather.weather import getWeatherData
 
 
 class ActionDecider:
@@ -55,11 +56,13 @@ class ActionDecider:
                 "I understand you want to turn the lights off")
             # Call a simple web api
         elif "kill yourself" in textForm:
-            VoiceEngine.getVoice("Alight I am gonna rest now!")
+            VoiceEngine.getVoice("Alight I am gonna rest now! Bye Bye")
             return 1
         elif "play music" in textForm:
             VoiceEngine.getVoice("Which song maester?")
-
+        elif "weather" in textForm:
+            VoiceEngine.getVoice("Yo Boss Gimme a second")
+            getWeatherData()
         else:
             VoiceEngine.getVoice(
                 "I am sorry I cannot do that ! But you can teach me how")
