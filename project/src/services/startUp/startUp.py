@@ -19,3 +19,6 @@ def main():
                 value = ActionDecider.decideTakeAction(textForm)
                 if value == 1:
                     break
+
+
+""" main() """

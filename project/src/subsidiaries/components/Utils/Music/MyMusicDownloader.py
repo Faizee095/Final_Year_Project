@@ -3,6 +3,8 @@ import pandas as pd
 import os
 from src.subsidiaries.components.Utils.speech.textSpeech import VoiceEngine
 import logging
+import sys
+import json
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -12,11 +14,14 @@ logger = logging.getLogger(__name__)
 class YouTubeDownloader:
 
     def __init__(self):
-        self.SAVE_PATH = "C:\\Users\\sumitsingh\\Documents\\Python\\hma"
+        path = sys._MEIPASS+"\\user-settings.json"
+        with open(path, 'r') as f:
+            data = json.load(f)["music-library-path"]
+        self.SAVE_PATH = data
         self.options = {
             'format': 'bestaudio/best',  # choice of quality
             'extractaudio': True,      # only keep the audio
-            'audioformat': "mp3",      # convert to mp3
+            'audioformat': ".mp3",      # convert to mp3
             # name the file the ID of the video
             'outtmpl': self.SAVE_PATH+"//"+'%(title)s',
             'noplaylist': True, }       # only download single song, not playlist

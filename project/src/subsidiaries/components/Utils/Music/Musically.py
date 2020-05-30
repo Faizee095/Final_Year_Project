@@ -12,43 +12,45 @@ from src.subsidiaries.components.Utils.speech.speechText import SpeechRecogReg
 from src.subsidiaries.components.Utils.speech.textSpeech import VoiceEngine
 import vlc
 import os
-os.add_dll_directory(r'C:\\Program Files\\VideoLAN\\VLC')
-
-
-def callback(recog, audio):
-    print(recog.recognize_google(audio))
+import sys
+from pathlib import Path
+import json
 
 
 def play():
-    r1 = sr.Recognizer()
-    m = sr.Microphone()
+    bundle_dir = sys._MEIPASS
+    path = bundle_dir+"\\user-settings.json"
 
-    with m as source1:
-        r1.adjust_for_ambient_noise(source1)
+    with open(path, 'r') as f:
+        data = json.load(f)["music-library-path"]
 
-    with sr.Microphone() as source:
-        VoiceEngine.getVoice("Which song do you wanna play ?")
-        print("Which song do you wanna play ?")
-        audio = r1.listen(source)
-        filename = r1.recognize_google(audio)
+    VoiceEngine.getVoice("Which song do you wanna play ?")
+    print("Which song do you wanna play ?")
+    filename = SpeechRecogReg()
 
-        print("You said ", filename)
-        VoiceEngine.getVoice("Playing "+filename)
+    print("You said ", filename)
+    VoiceEngine.getVoice("Playing "+filename)
 
-    # x = input("Enter song name ")
-        s = vlc.MediaPlayer(
-            "C:\\Users\\sumitsingh\\Documents\\Python\\hma"+filename+".mp3")
-        s.play()
-        print("press 1 to play, 2 to stop")
+# x = input("Enter song name ")
+    s = vlc.MediaPlayer(
+        data+filename+".mp3")
+    s.play()
+    s.audio_set_volume(35)
+    stopper = SpeechRecogReg()
+    while(stopper != "stop"):
+        print("Listening ")
+        stopper = SpeechRecogReg()
 
-        r1 = sr.Recognizer()
-        stopper = ""
-        while(stopper != "stop"):
-            print("Listening ")
-            audio1 = r1.listen(source)
-            stopper = r1.recognize_google(audio1)
-    #        print("You said ",stopper)
-        s.stop()
+        if ("volume up" in stopper):
+            s.audio_set_volume(50)
+        if ("pause" in stopper):
+            s.audio_set_mute(True)
+        if ("continue" in stopper):
+            s.audio_set_mute(False)
+        if ("volume down" in stopper):
+            s.audio_set_volume(35)
+        print("You said ", stopper)
 
+    s.stop()
 
-play()
+    return "session ended"
