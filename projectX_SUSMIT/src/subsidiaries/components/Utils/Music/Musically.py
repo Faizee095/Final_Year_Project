@@ -12,14 +12,17 @@ from src.subsidiaries.components.Utils.speech.speechText import SpeechRecogReg
 from src.subsidiaries.components.Utils.speech.textSpeech import VoiceEngine
 import vlc
 import os
-#os.add_dll_directory(r'C:\\Program Files\\VideoLAN\\VLC')
-
-
-def callback(recog, audio):
-    print(recog.recognize_google(audio))
+from pathlib import Path
+import json
 
 
 def play():
+        path = Path(__file__).parent / \
+        "../../settings/user-settings.json"
+
+        with path.open() as f:
+            data = json.load(f)["music-library-path"]
+
         VoiceEngine.getVoice("Which song do you wanna play ?")
         print("Which song do you wanna play ?")
         filename=SpeechRecogReg()
@@ -29,16 +32,24 @@ def play():
 
     # x = input("Enter song name ")
         s = vlc.MediaPlayer(
-            "F:\\song\\"+filename+".mp3")
+            data+filename+".mp3")
         s.play()
-        #os.startfile("F:\\song\\"+filename+".mp3")
-        print("press 1 to play, 2 to stop")
-
+        s.audio_set_volume(35)
         stopper = SpeechRecogReg()
         while(stopper != "stop"):
             print("Listening ")
             stopper = SpeechRecogReg()
+
+            if ( "volume up" in stopper):
+                s.audio_set_volume(50)
+            if ("pause" in stopper):
+                s.audio_set_mute(True)
+            if ("continue" in stopper):
+                s.audio_set_mute(False)
+            if ("volume down" in stopper):
+                s.audio_set_volume(35)
             print("You said ",stopper)
         
         s.stop()
 
+        return "session ended"

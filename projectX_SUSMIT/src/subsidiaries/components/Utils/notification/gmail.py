@@ -8,42 +8,65 @@ import smtplib
 import speech_recognition as sr
 import webbrowser as wb
 import json
-from subsidiaries.components.Utils.speech.textSpeech import getVoice
+from src.subsidiaries.components.Utils.speech.textSpeech import VoiceEngine
+from src.subsidiaries.components.Utils.speech.speechText import SpeechRecogReg
+from pathlib import Path
 
-r1 = sr.Recognizer()
-r2 = sr.Recognizer()
 
-with sr.Microphone() as source:
+def mailer():
+    path = Path(__file__).parent / \
+        "../../settings/user-settings.json"
+    print("path->", path)
+
+    user_emailId = ""
+    user_password = ""
+
+    with open(path) as f:
+        data = json.load(f)
+        user_emailId = data["emailId"]
+        user_password = data["password"]
+
+    print(user_emailId, user_password)
+
     print("[send mail]")
-    audio = r1.listen(source)
-    id1 = r1.recognize_google(audio)
-    id1.lower()
+    id1 = SpeechRecogReg().lower()
     print("You said ", id1)
 
-if "mail" in id1:
-    with sr.Microphone() as source:
-        getVoice("Whom do you want to mail ?")
+    if "mail" in id1:
+        VoiceEngine.getVoice("Whom do you want to mail ?")
         print("Whom do you want to mail ? ")
-        audio = r2.listen(source)
-        id1 = str(r2.recognize_google(audio))
+        id1 = SpeechRecogReg()
         print("you said ", id1)
         l = []
 
-        data = json.load(open("MyContacts.json"))
+        path = Path(__file__).parent / "MyContacts.json"
+        with path.open() as f:
+            data = json.load(f)["emails"]
+
         for i in id1.split(" and "):
-            l.append(data[i.lower()])
-        # l = ["susmitkumar266@gmail.com"]
+            if data[i.lower()] != None:
+                l.append(data[i.lower()])
+            else:
+                VoiceEngine.getVoice("Could not find email for ", i)
+
+        VoiceEngine.getVoice("What's the message boss ?")
+        message = SpeechRecogReg()
+
         s = smtplib.SMTP("smtp.gmail.com", 587)
         s.starttls()
-        getVoice("Sending email")
+        VoiceEngine.getVoice("Sending email, give me some time")
         print("Sending . . .")
-        for i in l:
-            s.login("susmitkumar011@gmail.com", "")
-            m = " Hi this is awesome "
-            s.sendmail("susmitkumar266@gmail.com", i, m)
-            getVoice("Sent to " + i)
-            print("Sent to ", i)
+        try:
+            for recipientEmailId in l:
+                s.login(user_emailId, user_password)
+                s.sendmail(user_emailId, recipientEmailId, message)
+                VoiceEngine.getVoice("Sent to " + recipientEmailId)
+                print("Sent to ", recipientEmailId)
+        except:
+            print("exception occurred")
+            VoiceEngine.getVoice(
+                "Boss, I am facing some issues. Why don't we try again later?")
 
         s.quit()
-        getVoice("Done Task")
+        VoiceEngine.getVoice("Done Task")
         print("Done task")

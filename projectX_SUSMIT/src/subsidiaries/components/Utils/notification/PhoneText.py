@@ -5,11 +5,13 @@ Created on Fri Sep 20 07:26:52 2019
 @author: Sumit Kumar Singh
 """
 
-from subsidiaries.components.Utils.speech.textSpeech import getVoice
+from src.subsidiaries.components.Utils.speech.textSpeech import VoiceEngine
+from src.subsidiaries.components.Utils.speech.speechText import SpeechRecogReg
 import speech_recognition as sr
 import webbrowser as wb
 import requests
 import json
+from pathlib import Path
 
 
 def sender(number, msg):
@@ -46,23 +48,34 @@ def sender(number, msg):
             """
 
 
-# print response if you want
+def sendMessage():
+    # print response if you want
+    flag = False
+    path = Path(__file__).parent / "MyContacts.json"
+    with path.open() as f:
+        data = json.load(f)["phones"]
+    print("Phones -> ", data)
 
-mydict = {"why": "8810507596", "x": "8709442967"}
-r1 = sr.Recognizer()
-
-with sr.Microphone() as source:
-    getVoice("Whom do you want to message ?")
+    VoiceEngine.getVoice("Whom do you want to message ?")
     print("Who do you wanna msg ?")
-    a = r1.listen(source)
-    a2 = r1.recognize_google(a)
+    a2 = SpeechRecogReg().lower()
     print("You said ", a2)
 
-    getVoice("What do you want to say ?")
+    while a2 not in data:
+        VoiceEngine.getVoice("Could find any contact for ", a2)
+        VoiceEngine.getVoice("Boss wanna terminate process or try again ?")
+        answer = SpeechRecogReg()
+        if "terminate" in answer:
+            flag = True
+            break
+
+    if (flag == True):
+        return
+
+    VoiceEngine.getVoice("What do you want to say ?")
     print("What do you want to say ?")
-    a3 = r1.listen(source)
-    msg = r1.recognize_google(a3)
+    msg = SpeechRecogReg()
     print("You said ", msg)
 
-    sender(mydict[a2.lower()], msg)
-    getVoice(" Message sent successfully ")
+    sender(data[a2], msg)
+    VoiceEngine.getVoice(" Message sent successfully ")
