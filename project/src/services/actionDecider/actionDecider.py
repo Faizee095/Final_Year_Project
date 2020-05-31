@@ -8,6 +8,7 @@ from src.subsidiaries.components.Utils.notification.PhoneText import sendMessage
 from src.subsidiaries.components.light_automation_system.LightAutomation import lightSystemCall
 from src.subsidiaries.components.Utils.date.date import timedate
 from src.subsidiaries.components.Utils.searcher.Searcher import googleSearcher, youTubeSearcher
+from src.subsidiaries.components.Utils.news.news import newsFeed
 
 
 class ActionDecider:
@@ -34,7 +35,6 @@ class ActionDecider:
             VoiceEngine.getVoice("I understand you want to search youtube")
             # Call Search Youtube
         elif "download music" in textForm:
-
             VoiceEngine.getVoice(
                 "I understand you want to download music. Let me process . . .")
             VoiceEngine.getVoice("Which song you wanna download ?")
@@ -72,6 +72,8 @@ class ActionDecider:
         elif "weather" in textForm:
             VoiceEngine.getVoice("Yo Boss Gimme a second")
             getWeatherData()
+        elif "news" in textForm:
+            newsFeed()
         else:
             VoiceEngine.getVoice(
                 "I am sorry I cannot do that ! But you can teach me how")
