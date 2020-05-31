@@ -2,31 +2,26 @@ import json
 import os
 import sys
 from pathlib import Path
-from src.services.startUp.startUp import main
-import sys
-from os import path
-
 
 
 def onInit():
-    if getattr(sys, 'frozen') and hasattr(sys, '_MEIPASS'):
-        print('running in a PyInstaller bundle')
+    frozen = 'not'
+    if getattr(sys, 'frozen', False):
+        # we are running in a bundle
+        frozen = 'ever so'
+        bundle_dir = sys._MEIPASS
     else:
-        print('running in a normal Python process')
+        # we are running in a normal Python environment
+        bundle_dir = os.path.dirname(os.path.abspath(__file__))
+    print('we are', frozen, 'frozen')
+    print('bundle dir is', bundle_dir)
+    print('sys.argv[0] is', sys.argv[0])
+    print('sys.executable is', sys.executable)
+    print('os.getcwd is', os.getcwd())
 
-    bundle_dir = getattr(sys, '_MEIPASS', path.abspath(path.dirname(__file__)))
-    pathD = path.join(bundle_dir, 'user-settings.json')
-
-    print("path->",pathD)
-
-    with open(pathD, "r") as json_file:
-        print(json.load(json_file))
-
-    while True:
-        pass
-
-    """ mydict = {}
-    print("----------------------Hello--------------------")
+    # Actual Code
+    mydict = {}
+    print("\n----------------------Hello--------------------\n")
     print("Welcome to Home Automation")
     user_name = input("Enter user name ")
     music_lib_path = input("Enter path to music library ")
@@ -41,9 +36,7 @@ def onInit():
     mydict["password"] = password
     mydict["music-library-path"] = music_lib_path
 
-    path = Path(__file__).parent / \
-        "../../subsidiaries/components/settings/user-settings.json"
+    path = bundle_dir+"\\user-settings.json"
 
     with open(path, 'w') as json_file:
-        json.dump(mydict, json_file) """
-
+        json.dump(mydict, json_file)
