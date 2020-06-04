@@ -5,35 +5,51 @@ Created on Fri Sep 20 04:21:31 2019
 @author: Sumit Kumar Singh
 """
 
-from subsidiaries.components.Utils.speech.textSpeech import getVoice
+from src.subsidiaries.components.Utils.speech.textSpeech import VoiceEngine
+from src.subsidiaries.components.Utils.speech.speechText import SpeechRecogReg
+#import webbrowser as wb
+import requests as req
 import speech_recognition as sr
-import webbrowser as wb
+from pathlib import Path
+import json
 
-r1 = sr.Recognizer()
-r2 = sr.Recognizer()
 
-with sr.Microphone() as source:
-    print("[Light Module]")
-    audio = r1.listen(source)
-    id1 = r1.recognize_google(audio)
-    id1.lower()
-    print("You said ", id1)
+def lightSystemCall(textForm):
+    number = textForm[textForm.index("number")+7: textForm.index("number")+8]
+    status = textForm[textForm.index("number")+9:]
 
-    if "light" in id1:
-        with sr.Microphone() as source:
-            getVoice("On or Off ?")
-            print("On or Off ?")
-            audio = r1.listen(source)
-            id1 = r1.recognize_google(audio)
-            id1.lower()
-            print("You said ", id1)
+    path = Path(__file__).parent / "appliances.json"
+    with path.open() as f:
+        data = json.load(f)
 
-            if "on" in id1:
-                wb.get().open_new("http://192.168.0.113/1/0")
-                getVoice("Light Turned On")
-                print("It is now on")
-            elif "of" in id1:
-                wb.get().open_new("http://192.168.0.113/1/1")
-                getVoice("Light Turned Off")
-                print("It is now off")
+    print("In the [Light Module]")
 
+    while(data["light "+number] is None):
+        key = data["light "+number]
+        print(key)
+        VoiceEngine.getVoice(
+            "I am sorry, could you please say that again or you wanna exit?")
+        textForm = SpeechRecogReg()
+
+        if "exit" in textForm:
+            return
+        number = textForm[textForm.index(
+            "number")+7: textForm.index("number")+8]
+        status = textForm[textForm.index("number")+9:]
+    try:
+        if "on" in status:
+            url = data["light "+number] + number + "/0"
+            # wb.get().open_new(url)
+            response = req.get(url)
+            VoiceEngine.getVoice("Light Turned On")
+            print("It is now on : ", url)
+        elif "of" or "off" in status:
+            url = data["light "+number] + number + "/1"
+            #wb.get().open_new(data["light " + number] + number + "/1")
+            resonse = req.get(url)
+            VoiceEngine.getVoice("Light Turned Off")
+            print("It is now off:", url)
+    except:
+        VoiceEngine.getVoice(
+            "Uh! I am facing some network problem. Why don't Try again later?")
+    return
