@@ -40,3 +40,4 @@ def onInit():
 
     with open(path, 'w') as json_file:
         json.dump(mydict, json_file)
+    return
