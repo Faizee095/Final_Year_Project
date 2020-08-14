@@ -11,17 +11,21 @@ Options: Set news source option,
 from src.subsidiaries.components.Utils.speech.textSpeech import VoiceEngine
 from src.subsidiaries.components.Utils.speech.speechText import SpeechRecogReg
 import requests
+import eel
 
 
 def handleResponse(response):
-    if (response["status"] == "ok"):
+    if response["status"] == "ok":
         top_articles = response["articles"]
         print("Number of trending articles->", len(top_articles))
         for i in top_articles:
             print("Source: ", i["source"]["name"])
             print("headline: ", i["title"])
+
+            eel.show_info(i["title"])
             VoiceEngine.getVoice(i["title"])
             # ask if details are required and print i["description"]
+            eel.show_info(i["description"])
             VoiceEngine.getVoice(i["description"])
 
             # ask if in depth details are required and print i["content"]
@@ -33,8 +37,7 @@ def handleResponse(response):
 
             # return ok
     else:
-        VoiceEngine.getVoice(
-            "I think there is some error. Should I try again ?")
+        VoiceEngine.getVoice("I think there is some error. Should I try again ?")
         attempt = SpeechRecogReg()
         if "Yes" in attempt or "try again" in attempt:
             return "1"
@@ -55,7 +58,7 @@ def fetchQueryNews(query):
         )
         response = requests.get(url).json()
         status = handleResponse(response)
-        if (status != "1"):
+        if status != "1":
             break
 
 
@@ -70,7 +73,7 @@ def fetchDailyNews():
         response = requests.get(url).json()
         response = requests.get(url).json()
         status = handleResponse(response)
-        if (status != "1"):
+        if status != "1":
             break
 
 

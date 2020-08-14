@@ -12,14 +12,15 @@ import json
 from src.subsidiaries.components.Utils.speech.textSpeech import VoiceEngine
 from src.subsidiaries.components.Utils.speech.speechText import SpeechRecogReg
 from pathlib import Path
+import eel
 
 
 def mailer():
-    path = sys._MEIPASS+"\\user-settings.json"
+    path = sys._MEIPASS + "\\user-settings.json"
     print("path->", path)
 
-    user_emailId = ""
-    user_password = ""
+    user_emailId = "7jhonwick0777@gmail.com"
+    user_password = "dontkillmydog"
 
     with open(path) as f:
         data = json.load(f)
@@ -39,7 +40,7 @@ def mailer():
         print("you said ", id1)
         l = []
 
-        with open(sys._MEIPASS+"\\MyContacts.json", 'r') as f:
+        with open(sys._MEIPASS + "\\MyContacts.json", "r") as f:
             data = json.load(f)["emails"]
 
         for i in id1.split(" and "):
@@ -54,6 +55,7 @@ def mailer():
         s = smtplib.SMTP("smtp.gmail.com", 587)
         s.starttls()
         VoiceEngine.getVoice("Sending email, give me some time")
+        eel.show_info("Sending . . .")
         print("Sending . . .")
         try:
             for recipientEmailId in l:
@@ -64,7 +66,8 @@ def mailer():
         except:
             print("exception occurred")
             VoiceEngine.getVoice(
-                "Boss, I am facing some issues. Why don't we try again later?")
+                "Boss, I am facing some issues. Why don't we try again later?"
+            )
 
         s.quit()
         VoiceEngine.getVoice("Done Task")

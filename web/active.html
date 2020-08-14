@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Animation
+    </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script> -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/style.css" />
+
+</head>
+
+<body onload="hide()">
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand" href="./main.html">Home Page</a>
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </nav>
+    <hr>
+    <div class="container">
+        <h2 class="alert alert-success" id="message"></h2>
+    </div>
+    <br>
+    <div class="container" id="topic">
+        <span class="label label-info">
+            <h2>Home Automation</h2>
+        </span>
+    </div>
+
+    <div class="container">
+        <label class="switch">
+            <input type="checkbox" onchange="startVOIP()" id="power">
+            <span class="slider round"></span>
+        </label>
+    </div>
+
+    <div class="container">
+        <p class="btn btn-info" id="information"></p>
+    </div>
+
+    <div class="container">
+        <canvas id="renderer"></canvas>
+        <div class="container">
+            <div class="second">
+                <div id="loader-wrapper">
+                    <div id="loader">
+                        <div id="loader1">
+                        </div>
+                    </div>
+                    <p><a onclick="lFunction()">Friday</a><a onclick="rFunction()"></a></p>
+                </div>
+                <div class="third">
+                    <div class="rightcontainer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="/eel.js"></script>
+        <script src="js/index.js"></script>
+        <script src="js/activate.js"></script>
+</body>
+
+</html>

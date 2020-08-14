@@ -13,10 +13,12 @@ import requests
 import json
 import sys
 from pathlib import Path
+import eel
 
 
 def sender(number, msg):
-    URL = "http://www.way2sms.com/api/v1/sendCampaign"
+    # URL = "http://www.way2sms.com/api/v1/sendCampaign"
+    URL = "https://www.sms4india.com/api/v1/sendCampaign"
 
     # get request
     def sendPostRequest(
@@ -35,8 +37,10 @@ def sender(number, msg):
     # get response
     response = sendPostRequest(
         URL,
-        "7ZRA0OQ1COMUGOALBRKQTIFOMQSS3FNL",
-        "7A3HVUBJLY4LNZJF",
+        # old: "7ZRA0OQ1COMUGOALBRKQTIFOMQSS3FNL",
+        "PS49F3RQLIBM0NYAWSYQZT5XUFIC96QB",
+        # old: "7A3HVUBJLY4LNZJF",
+        "QBKFE2XGOPWNUQIQ",
         "stage",
         number,
         "x",
@@ -52,8 +56,8 @@ def sender(number, msg):
 def sendMessage():
     # print response if you want
     flag = False
-    path = sys._MEIPASS+"\\MyContacts.json"
-    with open(path, 'r') as f:
+    path = sys._MEIPASS + "\\MyContacts.json"
+    with open(path, "r") as f:
         data = json.load(f)["phones"]
     print("Phones -> ", data)
 
@@ -63,14 +67,14 @@ def sendMessage():
     print("You said ", a2)
 
     while a2 not in data:
-        VoiceEngine.getVoice("Could find any contact for ", a2)
+        VoiceEngine.getVoice("Could find any contact for " + a2)
         VoiceEngine.getVoice("Boss wanna terminate process or try again ?")
         answer = SpeechRecogReg()
         if "terminate" in answer:
             flag = True
             break
 
-    if (flag == True):
+    if flag == True:
         return
 
     VoiceEngine.getVoice("What do you want to say ?")
@@ -79,4 +83,5 @@ def sendMessage():
     print("You said ", msg)
 
     sender(data[a2], msg)
+    eel.show_info("Message sent successfully")
     VoiceEngine.getVoice(" Message sent successfully ")
