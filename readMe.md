@@ -9,7 +9,7 @@
 
 ---
 > currently contributed by
-* susmit
-* faizee
+* Susmit
+* Faiyazuddin(faizee)
 * sumit
 * shahzeb
